@@ -20,6 +20,7 @@ public class MovementPointer : MonoBehaviour
 
     private SpriteRenderer _pelletRenderer;
     private AudioManager _audioManager;
+    private Score _score;
 
     private void Awake()
     {
@@ -130,6 +131,7 @@ public class MovementPointer : MonoBehaviour
             HasPellet = false;
             _pelletRenderer.enabled = false;
             _audioManager.PlayCollectPelletSound(this);
+            _score.Add(10);
         }
     }
 }
