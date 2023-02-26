@@ -4,10 +4,10 @@ public class MovementController : MonoBehaviour
 {
     public GameObject CurrentNode;
     public float speed = 4f;
-
-    private string _lastMovingDirection = "";
-    private string _direction = "";
-
+    public string LastMovingDirection = "";
+    public string Direction = "";
+    public bool canWarp = true;
+    public WarpController _warpController;
 
     private void Update()
     {
@@ -20,25 +20,47 @@ public class MovementController : MonoBehaviour
         if(transform.position.x == CurrentNode.transform.position.x &&
             transform.position.y == CurrentNode.transform.position.y)
         {
-            var newNode = pointer.GetNodeByDirection(_direction);
-            if(newNode != null)
+
+            if(pointer.IsLeftWarp && canWarp)
             {
-                CurrentNode = newNode;
-                _lastMovingDirection = _direction;
+                CurrentNode = _warpController.RightWArp;
+                Direction = LastMovingDirection = "left";
+                transform.position = CurrentNode.transform.position;
+                canWarp = false;
+            }
+            else if(pointer.IsRightWarp && canWarp)
+            {
+                CurrentNode = _warpController.LeftWarp;
+                Direction = LastMovingDirection = "right";
+                transform.position = CurrentNode.transform.position;
+                canWarp = false;
             }
             else
             {
-                _direction = _lastMovingDirection;
-                newNode = pointer.GetNodeByDirection(_direction);
+                var newNode = pointer.GetNodeByDirection(Direction);
                 if (newNode != null)
+                {
                     CurrentNode = newNode;
-            }
+                    LastMovingDirection = Direction;
+                }
+                else
+                {
+                    Direction = LastMovingDirection;
+                    newNode = pointer.GetNodeByDirection(Direction);
+                    if (newNode != null)
+                        CurrentNode = newNode;
+                }
+            }        
+        }
+        else
+        {
+            canWarp = true;
         }
     }
 
     public void SetDirection(string newDirection)
     {
-        _direction = newDirection;
+        Direction = newDirection;
     }
 
 }

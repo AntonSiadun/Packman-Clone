@@ -12,6 +12,9 @@ public class MovementPointer : MonoBehaviour
     public GameObject UpNode;
     public GameObject DownNode;
 
+    public bool IsLeftWarp = false;
+    public bool IsRightWarp = false;
+
     private void Start()
     {
         CheckDownDirection();
