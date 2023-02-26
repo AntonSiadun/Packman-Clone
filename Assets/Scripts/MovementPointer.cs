@@ -15,8 +15,27 @@ public class MovementPointer : MonoBehaviour
     public bool IsLeftWarp = false;
     public bool IsRightWarp = false;
 
+    public bool IsPelletNode = false;
+    public bool HasPellet = false;
+
+    private SpriteRenderer _pelletRenderer;
+    private AudioManager _audioManager;
+
+    private void Awake()
+    {
+        _audioManager = FindObjectOfType<AudioManager>();
+        _score = FindObjectOfType<Score>();
+    }
+
     private void Start()
     {
+        if(transform.childCount > 0)
+        {
+            IsPelletNode = true;
+            HasPellet = true;
+            _pelletRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
         CheckDownDirection();
         CheckLeftDirection();
         CheckRightDirection();
@@ -102,5 +121,15 @@ public class MovementPointer : MonoBehaviour
             return RightNode;
         }
         else return null;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player") && HasPellet)
+        {
+            HasPellet = false;
+            _pelletRenderer.enabled = false;
+            _audioManager.PlayCollectPelletSound(this);
+        }
     }
 }
