@@ -79,4 +79,25 @@ public class MovementPointer : MonoBehaviour
             }
         }
     }
+
+    public GameObject GetNodeByDirection(string direction)
+    {
+        if (direction == "up" && CanMoveUp)
+        {
+            return UpNode;
+        }
+        else if (direction == "down" && CanMoveDown)
+        {
+            return DownNode;
+        }
+        else if (direction == "left" && CanMoveLeft)
+        {
+            return LeftNode;
+        }
+        else if (direction == "right" && CanMoveRight)
+        {
+            return RightNode;
+        }
+        else return null;
+    }
 }
